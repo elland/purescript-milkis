@@ -7,6 +7,7 @@ module Milkis
   , Headers
   , Redirect
   , Credentials
+  , Body(..)
   , defaultFetchOptions
   , getMethod
   , postMethod
@@ -43,6 +44,7 @@ import Milkis.Impl (FetchImpl)
 import Prelude (class Eq, class Show, ($))
 import Type.Row (class Union)
 import Unsafe.Coerce (unsafeCoerce)
+import Web.File.File (File)
 
 -- | Create a map from a homogeneous record (all attributes have the same type).
 fromRecord :: forall r t. Homogeneous r t => Record r -> Object.Object t
@@ -62,9 +64,12 @@ type Fetch
   -> Record (method :: Method | options)
   -> Aff Response
 
+data Body = BodyString String
+            | BodyFile File
+
 type Options =
   ( method :: Method
-  , body :: String
+  , body :: Body
   , headers :: Headers
   , credentials :: Credentials
   , follow :: Int
